@@ -6,10 +6,39 @@ def create_sparse(data):
     for i, genres in enumerate(data):
         for genre in genres.split("|"):
             if genre in mat.columns:
-                mat.at[i, genre] += 1
+                mat.at[i, genre] = 1
             else:
                 mat[genre] = np.zeros(data.shape[0])
-                mat.at[i, genre] += 1
+                mat.at[i, genre] = 1
+    return mat
+
+
+def create_sparse_cluster(data, cluster_dict):
+    mat = pd.DataFrame()
+    for i, genres in enumerate(data):
+        for genre in genres.split("|"):
+            cluster = cluster_dict[genre]
+            # print(genre, ": ", cluster)
+            if cluster in mat.columns:
+                mat.at[i, cluster] = 1
+            else:
+                mat[cluster] = np.zeros(data.shape[0])
+                mat.at[i, cluster] = 1
+    return mat
+
+
+def create_naive(data):
+    mat = pd.DataFrame()
+    for i, genres in enumerate(data):
+        for genre in genres.split("|"):
+            if len(genre.split()) > 1:
+                break
+            else:
+                if genre in mat.columns:
+                    mat.at[i, genre] += 1
+                else:
+                    mat[genre] = np.zeros(data.shape[0])
+                    mat.at[i, genre] += 1
     return mat
 
 
